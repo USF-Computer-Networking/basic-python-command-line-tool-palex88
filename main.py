@@ -7,11 +7,13 @@
 # Date Modified:  2018-02-12
 # Python Version: 3.6
 
+import os
 import time
 import progressbar
 import whois
 from argparse import ArgumentParser
 from pprint import pprint
+from glob import glob
 
 
 def progress(num):
@@ -27,6 +29,9 @@ def run():
     ap.add_argument('-na', '--name', help='Your name')
     ap.add_argument('-ps', '--progress', help='see a progress bar for the number')
     ap.add_argument('-w', '--who', help='look up a domain')
+    ap.add_argument('-f', '--file', help='create a new file txt file, do not specify file type')
+    ap.add_argument('-l', '--list', default=False, action='store_true', help='list all txt files')
+    ap.add_argument('-df', '--delete', help='delete a txt file, specify a file type')
     args = ap.parse_args()
 
     if args.verbose:
@@ -48,6 +53,24 @@ def run():
     if args.who:
         domain = whois.query(args.who)
         pprint(domain.__dict__)
+
+    if args.file:
+        file = args.file
+        with open(file + '.txt', 'w') as f:
+            pass
+
+    if args.list:
+        print(glob('*.txt'))
+
+    if args.delete:
+        file = args.delete
+        if os.path.isfile(file + '.txt'):
+            if file.endswith('.txt'):
+                os.remove(file)
+            else:
+                print('you can only delete txt files')
+        else:
+            print('that file does not exist')
 
 
 if __name__ == '__main__':
