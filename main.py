@@ -9,17 +9,12 @@
 
 import os
 import time
-import progressbar
-import whois
 from argparse import ArgumentParser
 from pprint import pprint
 from glob import glob
 
-
-def progress(num):
-    bar = progressbar.ProgressBar()
-    for i in bar(range(num)):
-        time.sleep(.05)
+import progressbar
+import whois
 
 
 def run():
@@ -48,7 +43,9 @@ def run():
 
     if args.progress:
         num = (args.progress or 100)
-        progress(num)
+        bar = progressbar.ProgressBar()
+        for i in bar(range(num)):
+            time.sleep(.05)
 
     if args.who:
         domain = whois.query(args.who)
